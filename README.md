@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@daisu-ui/cli"><img src="https://img.shields.io/npm/v/%40daisu-ui%2Fcli/beta?style=flat-square&amp;color=1c64fd&amp;label=npm" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@daisu-ui/cli"><img src="https://img.shields.io/npm/v/%40daisu-ui%2Fcli?style=flat-square&amp;color=1c64fd&amp;label=npm" alt="npm version"></a>
   <a href="https://www.npmjs.com/package/@daisu-ui/cli"><img src="https://img.shields.io/badge/downloads-new%20package-868e96?style=flat-square" alt="npm downloads: new package"></a>
   <a href="https://git.zilueit.com/daisu-ui/cli/-/pipelines"><img src="https://img.shields.io/badge/CI-GitLab-fc6d26?style=flat-square" alt="GitLab CI"></a>
   <a href="https://git.zilueit.com/daisu-ui/cli/-/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-74a600?style=flat-square" alt="MIT license"></a>
@@ -39,10 +39,10 @@ Daisu UI 是面向 **ReactLynx** 的组件库。这个工具将真实的公开�
 
 ## 🚀 30 秒接入
 
-需要 **Node.js >= 20.19.0**。当前为预发布版本，使用 `beta` 标签安装。
+需要 **Node.js >= 20.19.0**。当前为预发布版本，使用 `latest` 标签安装当前版本。
 
 ```bash
-npm install -g @daisu-ui/cli@beta
+npm install -g @daisu-ui/cli@latest
 ```
 
 进入使用组件库的项目，配置你的 AI 客户端：
@@ -178,14 +178,14 @@ OpenCode 复用唯一的已有配置；存在多个候选文件时要求先合�
 全局安装后使用 `daisu`，也可以按需运行：
 
 ```bash
-npx -y @daisu-ui/cli@beta info Button
-pnpm dlx @daisu-ui/cli@beta info Button
+npx -y @daisu-ui/cli@latest info Button
+pnpm dlx @daisu-ui/cli@latest info Button
 ```
 
 项目开发依赖方式：
 
 ```bash
-npm install --save-dev @daisu-ui/cli@beta
+npm install --save-dev @daisu-ui/cli@latest
 npx --no-install daisu info Button
 ```
 
@@ -236,7 +236,7 @@ daisu list --version latest --format json
 daisu data check
 ```
 
-CLI `0.1.0-beta.3` 收录当前 `@daisu-ui/ui@0.1.0-beta.3` 及历史 `daisu-ui` 快照。默认优先识别项目实际安装版本，再检查依赖声明，最后使用随包最新数据；找不到对应版本会明确报错。尚未安装的本地路径或 Git 依赖无法确定版本时，会给出提示。历史版本的导入路径以查询结果中的 `importFrom` 为准。
+CLI `0.1.0-beta.4` 收录当前 `@daisu-ui/ui@0.1.0-beta.3` 及历史 `daisu-ui` 快照。默认优先识别项目实际安装版本，再检查依赖声明，最后使用随包最新数据；找不到对应版本会明确报错。尚未安装的本地路径或 Git 依赖无法确定版本时，会给出提示。历史版本的导入路径以查询结果中的 `importFrom` 为准。
 
 查询支持 `--format text|json|markdown`。结构化结果写入 stdout，错误和提示写入 stderr；`lint` 有错误时返回非零退出码，`--strict` 将警告也视为失败。`daisu --version` 是 CLI 版本，子命令的 `--version <值>` 是组件数据版本。
 
@@ -293,7 +293,7 @@ daisu mcp serve
       "command": "npx",
       "args": [
         "-y",
-        "@daisu-ui/cli@0.1.0-beta.3",
+        "@daisu-ui/cli@0.1.0-beta.4",
         "mcp",
         "serve",
         "--cwd",
@@ -339,7 +339,7 @@ npm run verify
 
 `verify` 包括格式、类型、测试、数据摘要、发布版本和 tarball 独立安装验证。测试使用临时目录，不改真实编辑器配置。显式维护入口仍为 `npm run sync -- --ui-dir <UI仓库>` 与 `npm run docs:export -- --ui-dir <UI仓库>`；数据同步不自动拉取 Git。
 
-CI 兼容现有 GitLab，校验分支和版本 Tag 并保存 npm tarball，不自动发布。`AGENTS.md` 管理仓库开发规则；消费端 Skill 通过 `agent init` 安装到使用者项目。
+CI 兼容现有 GitLab：developer 用于开发、main 用于发布，普通推送执行验证；已合入 main 的版本标签自动发布经过校验的 tarball。发布凭据保存在受保护的 GitLab NPM_TOKEN 变量中。分支、渠道、Runner 和重试方式见 [自动发布说明](https://git.zilueit.com/daisu-ui/cli/-/blob/main/docs/releasing.md)。`AGENTS.md` 管理仓库开发规则；消费端 Skill 通过 `agent init` 安装到使用者项目。
 
 ## 当前边界
 

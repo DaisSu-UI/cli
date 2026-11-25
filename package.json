@@ -1,6 +1,6 @@
 {
   "name": "@daisu-ui/cli",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.4",
   "description": "Daisu UI 的离线组件知识库、ReactLynx 项目分析、MCP 与 Agent 接入工具",
   "license": "MIT",
   "type": "module",
@@ -36,15 +36,18 @@
     "test": "npm run build && node --test tests/*.test.mjs",
     "check:package": "node scripts/check-package.mjs",
     "prepack": "npm run build && npm run data:check",
-    "format": "prettier --write src scripts tests README.md AGENTS.md CHANGELOG.md THIRD_PARTY_NOTICES.md skills package.json tsconfig.json .gitlab-ci.yml",
-    "format:check": "prettier --check src scripts tests README.md AGENTS.md CHANGELOG.md THIRD_PARTY_NOTICES.md skills package.json tsconfig.json .gitlab-ci.yml",
+    "format": "prettier --write src scripts tests docs ops README.md AGENTS.md CHANGELOG.md THIRD_PARTY_NOTICES.md skills package.json tsconfig.json .gitlab-ci.yml",
+    "format:check": "prettier --check src scripts tests docs ops README.md AGENTS.md CHANGELOG.md THIRD_PARTY_NOTICES.md skills package.json tsconfig.json .gitlab-ci.yml",
     "sync": "node scripts/sync.mjs",
     "data:check": "node scripts/validate-data.mjs",
     "verify": "node scripts/verify.mjs",
     "release:check": "node scripts/check-release.mjs",
     "docs:export": "npm run build && node dist/index.js docs export",
     "dev": "node scripts/auto-sync.mjs --watch",
-    "sync:auto": "node scripts/auto-sync.mjs"
+    "sync:auto": "node scripts/auto-sync.mjs",
+    "npm:prepare": "node scripts/prepare-npm-release.mjs",
+    "npm:publish": "node scripts/publish-npm-release.mjs",
+    "test:release": "node --test tests/npm-release.test.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -62,7 +65,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "tag": "beta"
+    "tag": "latest"
   },
   "keywords": [
     "daisu-ui",
