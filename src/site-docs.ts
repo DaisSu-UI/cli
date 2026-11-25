@@ -107,7 +107,7 @@ Daisu UI 提供面向 ReactLynx 的组件文档、版本化离线知识库、CLI
 
 ### 第一次使用
 
-CLI 当前版本为 \`${cliPackage.version}\`，尚未发布到 npmjs。先按 [CLI 安装说明](#/ai-cli) 从 Git 源码构建或安装本地 tarball。CLI 安装完成后，下面的命令均可离线查询；组件包和 CLI 是两个独立的安装项。
+CLI 当前版本为 \`${cliPackage.version}\`，在 npmjs 使用 beta 标签。先按 [CLI 安装说明](#/ai-cli) 安装 @daisu-ui/cli@beta；也可从 Git 源码构建或安装本地 tarball。CLI 安装完成后，下面的命令均可离线查询；组件包和 CLI 是两个独立的安装项。
 
 在消费项目执行：
 
@@ -179,9 +179,21 @@ ${note}
 `,
     "cli.md": `# CLI 工具
 
-\`@daisu-ui/cli\` 提供离线组件知识查询、ReactLynx 项目分析、MCP 和 Agent 接入。可执行命令为 \`daisu\`，Node.js 要求 >=20.19.0。CLI 当前为 \`${cliPackage.version}\`，尚未发布到 npmjs，使用 Git 源码或本地 tarball。
+\`@daisu-ui/cli\` 提供离线组件知识查询、ReactLynx 项目分析、MCP 和 Agent 接入。可执行命令为 \`daisu\`，Node.js 要求 >=20.19.0。CLI 当前为 \`${cliPackage.version}\`，在 npmjs 使用 beta 标签，也支持 Git 源码与本地 tarball。
 
 ## 获取与安装
+
+### 从 npmjs 安装
+
+\`\`\`bash
+npm install -g @daisu-ui/cli@beta
+daisu --version
+daisu info Button
+\`\`\`
+
+也可一次性执行 \`npx --yes @daisu-ui/cli@beta info Button\`；消费项目安装开发依赖使用 \`npm install --save-dev @daisu-ui/cli@beta\`，之后执行 \`npx --no-install daisu\`。安装或首次 npx 下载需要网络，安装后的本地查询和 MCP 仍离线运行。要固定 CLI 版本可将 beta 换为具体版本号。
+
+### 从 Git 构建
 
 源码仓库：[daisu-ui/cli](https://git.zilueit.com/daisu-ui/cli)。以下克隆方式需要对应 GitLab 仓库的 SSH 访问权限：
 
@@ -225,7 +237,7 @@ npx --no-install daisu doctor .
 npx --no-install daisu info Button
 \`\`\`
 
-后文中的 \`daisu\` 指已安装的命令；源码用户使用绝对入口，项目依赖用户使用 \`npx --no-install daisu\`。CLI 包内含离线知识快照和 Skill，安装完成后查询与本地 MCP 不依赖 UI 源码目录。尚未发布的包不能通过 \`npx @daisu-ui/cli\` 下载。
+后文中的 \`daisu\` 指已安装的命令；源码用户使用绝对入口，项目依赖用户使用 \`npx --no-install daisu\`。CLI 包内含离线知识快照和 Skill，安装完成后查询与本地 MCP 不依赖 UI 源码目录。预发布使用 \`npx @daisu-ui/cli@beta\`，避免依赖尚未设置的 latest 标签。
 
 ## 查询 API、示例与主题
 
@@ -282,7 +294,7 @@ daisu update
 daisu update --check
 \`\`\`
 
-查询、项目分析和本地 MCP 默认离线。data check 校验版本索引、数据结构和 SHA-256 摘要，不代表快照已与最新 UI 源码一致。update 默认只报告本地状态；只有 \`update --check\` 联网查询 CLI 版本，不自动安装。包尚未发布时返回 not-published；安装依赖及未来的 npx 启动方式可能需要网络。
+查询、项目分析和本地 MCP 默认离线。data check 校验版本索引、数据结构和 SHA-256 摘要，不代表快照已与最新 UI 源码一致。update 默认只报告本地状态；只有 \`update --check\` 联网查询 CLI 版本，不自动安装。包尚未发布时返回 not-published；安装依赖及 npx 启动方式可能需要网络。
 
 ## 命令与参数
 

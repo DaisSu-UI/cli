@@ -47,7 +47,7 @@ test("lifecycle lint applies to components, props, hooks and namespaces only whe
   put(
     root,
     "Page.tsx",
-    `import{Button as Action,useToast}from'daisu-ui';import * as UI from 'daisu-ui';export function Page(){useToast();return <><Action label="确认"/><UI.Button label="继续"/></>}`,
+    `import{Button as Action,useToast}from${JSON.stringify(button.importFrom)};import * as UI from ${JSON.stringify(button.importFrom)};export function Page(){useToast();return <><Action label="确认"/><UI.Button label="继续"/></>}`,
   );
   const report = analyzeProject(root, data);
   assert.equal(
