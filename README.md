@@ -1,15 +1,34 @@
-# @daisu-ui/cli
+<p align="center">
+  <a href="https://www.npmjs.com/package/@daisu-ui/cli">
+    <img src="https://cdn.jsdelivr.net/npm/@daisu-ui/cli@0.1.0-beta.3/assets/daisu-ui-icon.svg" width="96" height="96" alt="Daisu UI CLI">
+  </a>
+</p>
 
-**让 AI 准确使用 Daisu UI。**
+<h1 align="center">@daisu-ui/cli</h1>
 
-把组件 API、文档、示例和版本知识，接入你的终端与 AI 编程工具。
+<p align="center"><strong>让 AI 准确使用 Daisu UI。</strong></p>
 
-[![npm version](https://img.shields.io/npm/v/%40daisu-ui%2Fcli/beta)](https://www.npmjs.com/package/@daisu-ui/cli)
-[![npm downloads](https://img.shields.io/npm/dm/%40daisu-ui%2Fcli)](https://www.npmjs.com/package/@daisu-ui/cli)
-[![CI](https://git.zilueit.com/daisu-ui/cli/badges/main/pipeline.svg)](https://git.zilueit.com/daisu-ui/cli/-/pipelines)
-[![license](https://img.shields.io/npm/l/%40daisu-ui%2Fcli)](https://git.zilueit.com/daisu-ui/cli/-/blob/main/LICENSE)
+<p align="center">
+  把组件 API、文档、示例和版本知识，接入你的终端与 AI 编程工具。
+</p>
 
-[组件库](https://git.zilueit.com/daisu-ui/daisu-ui) · [快速开始](#快速开始) · [Agent 接入](#agent-接入) · [CLI](#在终端使用) · [MCP](#只配置-mcp) · [参与贡献](#开发与贡献)
+<p align="center">
+  <a href="https://www.npmjs.com/package/@daisu-ui/cli"><img src="https://img.shields.io/npm/v/%40daisu-ui%2Fcli/beta?style=flat-square&amp;color=1c64fd&amp;label=npm" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@daisu-ui/cli"><img src="https://img.shields.io/badge/downloads-new%20package-868e96?style=flat-square" alt="npm downloads: new package"></a>
+  <a href="https://git.zilueit.com/daisu-ui/cli/-/pipelines"><img src="https://img.shields.io/badge/CI-GitLab-fc6d26?style=flat-square" alt="GitLab CI"></a>
+  <a href="https://git.zilueit.com/daisu-ui/cli/-/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-74a600?style=flat-square" alt="MIT license"></a>
+</p>
+
+<p align="center">
+  <a href="https://git.zilueit.com/daisu-ui/daisu-ui">组件文档</a>
+  · <a href="#-30-秒接入">快速开始</a>
+  · <a href="#agent-接入">Agent 接入</a>
+  · <a href="#在终端使用">CLI</a>
+  · <a href="#只配置-mcp">MCP</a>
+  · <a href="#开发与贡献">参与贡献</a>
+</p>
+
+---
 
 Daisu UI 是面向 **ReactLynx** 的组件库。这个工具将真实的公开类型、组件说明、CSS 变量、交互示例和更新记录打包为离线知识库，通过 CLI、MCP 和消费端 Skill 提供给开发者与 AI Agent。
 
@@ -18,7 +37,7 @@ Daisu UI 是面向 **ReactLynx** 的组件库。这个工具将真实的公开�
 - **离线使用知识**：数据随 npm 包分发，查询不需要文档服务、API Key 或网络。
 - **保留用户配置**：支持 dry-run、幂等写入、原子替换与失败回滚，按归属管理接入内容。
 
-## 快速开始
+## 🚀 30 秒接入
 
 需要 **Node.js >= 20.19.0**。当前为预发布版本，使用 `beta` 标签安装。
 
@@ -217,7 +236,7 @@ daisu list --version latest --format json
 daisu data check
 ```
 
-CLI `0.1.0-beta.2` 收录当前 `@daisu-ui/ui@0.1.0-beta.3` 及历史 `daisu-ui` 快照。默认优先识别项目实际安装版本，再检查依赖声明，最后使用随包最新数据；找不到对应版本会明确报错。尚未安装的本地路径或 Git 依赖无法确定版本时，会给出提示。历史版本的导入路径以查询结果中的 `importFrom` 为准。
+CLI `0.1.0-beta.3` 收录当前 `@daisu-ui/ui@0.1.0-beta.3` 及历史 `daisu-ui` 快照。默认优先识别项目实际安装版本，再检查依赖声明，最后使用随包最新数据；找不到对应版本会明确报错。尚未安装的本地路径或 Git 依赖无法确定版本时，会给出提示。历史版本的导入路径以查询结果中的 `importFrom` 为准。
 
 查询支持 `--format text|json|markdown`。结构化结果写入 stdout，错误和提示写入 stderr；`lint` 有错误时返回非零退出码，`--strict` 将警告也视为失败。`daisu --version` 是 CLI 版本，子命令的 `--version <值>` 是组件数据版本。
 
@@ -274,7 +293,7 @@ daisu mcp serve
       "command": "npx",
       "args": [
         "-y",
-        "@daisu-ui/cli@0.1.0-beta.2",
+        "@daisu-ui/cli@0.1.0-beta.3",
         "mcp",
         "serve",
         "--cwd",

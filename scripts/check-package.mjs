@@ -22,6 +22,7 @@ const result = JSON.parse(
 const files = result.files.map((f) => f.path);
 for (const name of [
   "dist/index.js",
+  "assets/daisu-ui-icon.svg",
   "dist/api.d.ts",
   "data/versions.json",
   "skills/daisu-ui/SKILL.md",
