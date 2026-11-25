@@ -74,7 +74,7 @@ test("export rejects non-UI targets and symlinks escaping the selected repositor
   await assert.rejects(exportSiteDocs(root), /路径越界/);
 });
 
-test("documented client snippets parse with project scope and point to the standalone CLI", async () => {
+test("documented global client snippets parse and use the published CLI entry", async () => {
   const pages = await renderSiteDocs();
   const blocks = [
     ...pages["mcp.md"].matchAll(/```(?:json|toml)\n([\s\S]*?)```/g),
@@ -83,14 +83,15 @@ test("documented client snippets parse with project scope and point to the stand
   for (const [index, id] of ["cursor", "vscode", "codex"].entries()) {
     const client = clients.find((item) => item.id === id);
     const server = decodeServer(client, serverEntry(blocks[index][1], client));
-    assert.equal(server.command, "/absolute/path/to/node");
-    assert.deepEqual(server.args, [
-      "/absolute/path/to/cli/dist/index.js",
-      "mcp",
-      "serve",
-      "--cwd",
-      "/absolute/path/to/consumer-project",
-    ]);
+    assert.equal(server.command, "daisu");
+    assert.deepEqual(server.args, ["mcp"]);
+  }
+  for (const name of ["overview.md", "cli.md"]) {
+    const block = pages[name].match(/```json\n([\s\S]*?)```/);
+    assert(block, name);
+    const client = clients.find((item) => item.id === "cursor");
+    const server = decodeServer(client, serverEntry(block[1], client));
+    assert.deepEqual(server, { command: "daisu", args: ["mcp"] });
   }
   assert.match(pages["cli.md"], /git@git.zilueit.com:daisu-ui\/cli.git/);
   assert.match(pages["overview.md"], /daisu_status/);

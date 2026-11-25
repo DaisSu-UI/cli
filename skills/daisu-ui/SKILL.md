@@ -23,6 +23,6 @@ MCP 查询工具包括 daisu_list、daisu_search、daisu_info、daisu_doc、dais
 
 跨组件传递、包含状态更新或宿主调用的事件函数按 ReactLynx 双线程规则标记 `'background only'`；不使用 `useLayoutEffect`。浏览器媒体、裁剪和原生能力的支持范围以当前组件文档为准，Web 演示不等于设备验证。
 
-若 CLI 没有在 PATH 中，使用项目已配置的 Daisu MCP tools 或当前 CLI 的绝对路径；不要假定未发布的 npm 包已可下载。
+CLI 已通过 @daisu-ui/cli@beta 分发。若全局命令不在 PATH 中，使用项目已配置的 Daisu MCP tools、项目开发依赖的 npx --no-install daisu 或当前 CLI 的绝对入口。手工配置的全局 MCP 使用 command=daisu、args=[mcp]，客户端工作目录需指向消费项目。
 
 若查询结果包含明确的弃用标记，按文档中的替代接口调整；没有标注时不推测弃用或引入版本。MCP 诊断需区分服务调用、客户端登记与实际会话工具可用，不能把独立握手当作客户端已启用。

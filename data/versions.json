@@ -1,6 +1,7 @@
 {
-  "latest": "0.1.0-beta.3",
+  "latest": "0.1.0-beta.4",
   "versions": [
+    "0.1.0-beta.4",
     "0.1.0-beta.3",
     "0.1.0-beta.2",
     "0.1.0-beta.1"
@@ -8,6 +9,7 @@
   "digests": {
     "0.1.0-beta.1": "11136a781dde731deb402c3f3b4daaee0f813602adf7f76d3d1580f5f2720bfc",
     "0.1.0-beta.2": "e7970251605e966f6a1e7bac7c2151feecda49d5e1c9787d502231359ab9f07b",
-    "0.1.0-beta.3": "c3e0a44ff5c5c4245cf274a73f0b3993ee2577ec452fa3f2a83418f351d16239"
+    "0.1.0-beta.3": "db13c54fc10b825be35d60cea14450170f1d75188657272e21afc7a0edb26f12",
+    "0.1.0-beta.4": "0527ce50d4e0d0c48ca7430ba77182232802b2043c8086fde760a2d96ba86936"
   }
 }

@@ -53,16 +53,7 @@ export async function renderSiteDocs(): Promise<Record<string, string>> {
     await server.close();
   }
   const note = `本文由 \`${cliPackage.name}@${cliPackage.version}\` 生成。内容在 CLI 仓库维护；更新方式见 [CLI 工具](#/ai-cli)。`;
-  const sampleServer = {
-    command: "/absolute/path/to/node",
-    args: [
-      "/absolute/path/to/cli/dist/index.js",
-      "mcp",
-      "serve",
-      "--cwd",
-      "/absolute/path/to/consumer-project",
-    ],
-  };
+  const sampleServer = { command: "daisu", args: ["mcp"] };
   const config = (id: string) =>
     code(
       printClient(
@@ -121,6 +112,20 @@ daisu demo Input basic
 
 使用源码时，将 \`daisu\` 换为 \`node /绝对路径/cli/dist/index.js\`。不需要为查询启动文档网站，也不需要配置 API Key。
 
+### 接入 MCP
+
+先全局安装已发布的 CLI：
+
+\`\`\`bash
+npm install -g @daisu-ui/cli@beta
+\`\`\`
+
+在支持 mcpServers 的客户端中添加以下配置，由客户端启动服务：
+
+${config("cursor")}
+
+客户端需要能在 PATH 中找到 daisu，并在消费项目目录启动服务。需要固定项目时，在 args 中加上 --cwd 与消费项目绝对路径；VS Code、Codex 使用各自的配置格式，详见 [MCP 接入](#/ai-mcp)。
+
 ### 希望 Agent 完成开发任务
 
 先预览针对当前项目的配置计划，再指定实际客户端安装：
@@ -177,102 +182,89 @@ daisu agent doctor --client cursor
 
 ${note}
 `,
-    "cli.md": `# CLI 工具
+    "cli.md": `# @daisu-ui/cli
 
-\`@daisu-ui/cli\` 提供离线组件知识查询、ReactLynx 项目分析、MCP 和 Agent 接入。可执行命令为 \`daisu\`，Node.js 要求 >=20.19.0。CLI 当前为 \`${cliPackage.version}\`，在 npmjs 使用 beta 标签，也支持 Git 源码与本地 tarball。
+[@daisu-ui/cli](https://www.npmjs.com/package/@daisu-ui/cli) 是 Daisu UI 的 AI 工具包，提供命令行工具、MCP Server、版本化离线组件知识库和消费端 Skill。它将真实的 ReactLynx 组件 API、文档、示例、主题变量和更新记录接入终端、编辑器与 Agent。
 
-## 获取与安装
+[npm 包](https://www.npmjs.com/package/@daisu-ui/cli) · [源码仓库](https://git.zilueit.com/daisu-ui/cli) · [AI 总览](#/ai-guide)
 
-### 从 npmjs 安装
+不确定 CLI、LLMs.txt、MCP 和 Skills 的区别时，先阅读 [AI 总览](#/ai-guide)。组件运行时包为 @daisu-ui/ui，CLI 是单独安装的开发工具。
+
+## 亮点
+
+- **离线知识库**：组件属性、事件、插槽、方法、CSS 变量、Demo 与更新记录随包提供，查询不依赖文档服务或 API Key。
+- **适合 Agent 调用**：查询支持结构化输出，MCP 提供按需工具、文档资源和 Prompt。
+- **匹配项目版本**：识别实际安装依赖，支持选择已收录版本，历史包名和当前 @daisu-ui/ui 按各自 API 查询。
+- **ReactLynx 项目分析**：doctor、usage、lint 基于 TypeScript AST 检查集成、组件使用和已知模式，不执行被扫描代码。
+- **客户端接入**：可一次配置 MCP、Skill 和 Instructions，支持预览计划并保留用户已有配置。
+
+## 安装
+
+需要 Node.js >=20.19.0。当前发布在 npmjs，预发布建议显式安装 beta 标签：
 
 \`\`\`bash
 npm install -g @daisu-ui/cli@beta
 daisu --version
-daisu info Button
 \`\`\`
 
-也可一次性执行 \`npx --yes @daisu-ui/cli@beta info Button\`；消费项目安装开发依赖使用 \`npm install --save-dev @daisu-ui/cli@beta\`，之后执行 \`npx --no-install daisu\`。安装或首次 npx 下载需要网络，安装后的本地查询和 MCP 仍离线运行。要固定 CLI 版本可将 beta 换为具体版本号。
+安装完成后可使用 daisu 命令。需要固定 CLI 版本时，将 beta 换为具体版本，例如 ${cliPackage.version}。
 
-### 从 Git 构建
-
-源码仓库：[daisu-ui/cli](https://git.zilueit.com/daisu-ui/cli)。以下克隆方式需要对应 GitLab 仓库的 SSH 访问权限：
+不全局安装也可使用：
 
 \`\`\`bash
-git clone git@git.zilueit.com:daisu-ui/cli.git
-cd cli
-npm ci
-npm run build
-node dist/index.js --help
-node dist/index.js info Button
-\`\`\`
-
-源码运行无需全局安装。从消费项目调用时，使用入口的绝对路径：
-
-\`\`\`bash
-node /absolute/path/to/cli/dist/index.js doctor .
-node /absolute/path/to/cli/dist/index.js info Button
-\`\`\`
-
-### 安装 tarball
-
-在 CLI 仓库生成本地包：
-
-\`\`\`bash
-npm pack
-\`\`\`
-
-可选全局安装，获得 \`daisu\` 命令：
-
-\`\`\`bash
-npm install -g /path/to/daisu-ui-cli-${cliPackage.version}.tgz
-daisu --version
-daisu data check
-\`\`\`
-
-也可以作为消费项目的开发依赖：
-
-\`\`\`bash
-npm install --save-dev /path/to/daisu-ui-cli-${cliPackage.version}.tgz
-npx --no-install daisu doctor .
+npx --yes @daisu-ui/cli@beta info Button
+# 或安装为消费项目的开发依赖
+npm install --save-dev @daisu-ui/cli@beta
 npx --no-install daisu info Button
 \`\`\`
 
-后文中的 \`daisu\` 指已安装的命令；源码用户使用绝对入口，项目依赖用户使用 \`npx --no-install daisu\`。CLI 包内含离线知识快照和 Skill，安装完成后查询与本地 MCP 不依赖 UI 源码目录。预发布使用 \`npx @daisu-ui/cli@beta\`，避免依赖尚未设置的 latest 标签。
+首次安装和 npx 下载可能联网；安装后的本地知识查询与 MCP 默认离线。项目开发依赖用户将后文 daisu 替换为 npx --no-install daisu。
 
-## 查询 API、示例与主题
+## 快速开始
+
+在消费项目执行：
+
+\`\`\`bash
+daisu list
+daisu info Button
+daisu demo Button basic
+daisu doc Button
+daisu token Button
+daisu changelog
+\`\`\`
+
+组件名支持公开名称、目录 ID 和中文名，例如 Button、button、按钮。分组 ID 指向该组首个公开组件；Row、Col 等成员可以单独查询。
+
+## 命令速查
+
+### 组件知识
+
+${table(
+  ["命令", "用途", "选项"],
+  commandRows.filter(([name]) =>
+    /^`daisu (list|search|info|doc|demo|token|changelog)(?: |`)/.test(name),
+  ),
+)}
+
+demo 不指定示例名时列出示例；basic 读取基本用法，source 读取完整交互源码，其他示例名以实际列表为准。token 不带组件名时查询全局变量。search 检索完整组件说明和 LLM 约束，多个关键词以空格分隔并要求全部匹配。
 
 \`\`\`bash
 daisu list 表单
-daisu info Button --format json
-daisu doc Input
+daisu info Input --format json
 daisu demo Button
-daisu demo Button basic
 daisu demo Button source
 daisu search "受控" --limit 8
-daisu token Button
-daisu token
 daisu changelog Button
 \`\`\`
 
-组件名可使用公开名称、目录 ID 或中文名，如 Button、button、按钮。\`demo <组件>\` 列出可用示例，basic 读取基本用法，source 读取完整交互源码；其他示例名以列表结果为准。分组 ID 指向组内首个公开组件，查询 Row、Col 等具体名称可获得各自 API。
+### 项目分析
 
-查询支持 \`--format text|json|markdown\`。JSON 结果写入 stdout，错误写入 stderr，适合脚本或 Agent 调用；以具体命令的 \`--help\` 为准。
-
-## 选择组件数据版本
-
-\`\`\`bash
-daisu --version
-daisu data list
-daisu info Button --version latest
-daisu info Button --version 0.1.0-beta.1
-daisu info Button --cwd /absolute/path/to/consumer-project
-\`\`\`
-
-版本选择依次为：显式 \`--version\` → 项目实际安装的 @daisu-ui/ui 版本 → 最近 package.json 的依赖声明 → CLI 随包 latest。精确版本必须存在于离线快照中；semver 范围选择已收录且满足范围的最高版本。没有对应版本会报错，不用其他版本的 API 冒充。
-
-尚未安装的 file、workspace、Git 等依赖声明不能确定精确版本，会给出警告并使用随包数据。安装组件包后重新查询，或显式选择已收录版本。\`daisu --version\` 是 CLI 自身版本，子命令后的 \`--version <版本>\` 是组件数据版本；文档站页头的版本导航不会改变 CLI 的选择。
-
-## 检查消费项目
+${table(
+  ["命令", "用途", "选项"],
+  commandRows.filter(([name]) =>
+    /^`daisu (doctor|usage|lint)(?: |`)/.test(name),
+  ),
+)}
 
 \`\`\`bash
 daisu doctor .
@@ -281,66 +273,106 @@ daisu lint .
 daisu lint . --strict
 \`\`\`
 
-doctor 检查 Node、依赖、知识版本与 JSX 集成；usage 统计组件和 Hook；lint 检查私有导入、未知导出或属性、空按钮及已知线程回调模式。扫描采用 TypeScript AST，不执行被扫描代码，不跟随扫描树中的符号链接，忽略依赖、生成目录和 vendor。
+doctor 检查 Node、依赖、JSX 集成与知识版本；usage 统计组件和 Hook；lint 检查私有导入、未知导出或属性、空按钮及已知线程回调模式。有错误时 lint 返回非零退出码，--strict 将警告也视为失败。
 
-lint 有错误时返回非零退出码，\`--strict\` 将警告也视为失败。分析不提供完整的跨文件自定义 barrel 推导，不能替代 tsc、测试、构建或设备验收；涉及线程副作用的警告需要结合实际调用位置判断。
+扫描覆盖 TS/TSX、JS/JSX 及其 c/m 扩展名，忽略依赖、输出目录、vendor 和符号链接。它不提供完整的跨文件 barrel 推导，不能代替 tsc、测试、构建和原生设备验收。
 
-## 离线数据与更新
+## MCP Server
+
+启动 stdio 服务：
 
 \`\`\`bash
+daisu mcp
+\`\`\`
+
+全局安装后，在支持 mcpServers 的客户端中添加：
+
+${config("cursor")}
+
+客户端需能在 PATH 找到 daisu，并在消费项目目录启动服务。需要固定目录时，args 使用 ["mcp", "--cwd", "/absolute/path/to/project"]。服务没有网页或监听端口，一般由客户端启动，无需提前在终端运行。
+
+也可以让 CLI 自动配置本机入口：
+
+\`\`\`bash
+daisu mcp init --client cursor --dry-run
+daisu mcp init --client cursor --yes
+daisu mcp doctor --client cursor
+\`\`\`
+
+当前实际工具如下，来自 MCP 握手结果：
+
+${table(
+  ["工具", "用途"],
+  tools.map((tool) => ["`" + tool.name + "`", tool.description || ""]),
+)}
+
+VS Code、Codex 等配置格式、文档资源、Prompt、版本与连接排查见 [MCP 接入详情](#/ai-mcp)。独立握手通过后，仍需在实际会话调用 daisu_status 确认工具可用。
+
+## Agent 与 AI Skills
+
+在消费项目中，一次接入 MCP、Skill 和 Instructions：
+
+\`\`\`bash
+daisu agent list
+daisu agent init --client auto --dry-run
+daisu agent init --client cursor --yes
+daisu agent doctor --client cursor
+\`\`\`
+
+将 cursor 换为自己的客户端 ID。自动探测不明确时要求显式选择，--client all 表示明确接入全部支持的客户端。仅需 MCP 用 mcp init；Skill 内容、文件位置与移除步骤见 [AI Skills](#/ai-skills)。
+
+## 通用参数
+
+| 参数 | 适用命令 | 说明 |
+| --- | --- | --- |
+| --format text\\|json\\|markdown | 查询与分析命令 | 选择文本、JSON 或 Markdown 输出；以命令 --help 为准 |
+| --version <版本> | 组件查询、项目分析及 MCP 服务 | 选择已收录组件版本或范围，latest 表示随包最新快照 |
+| --cwd <目录> | 支持该选项的查询、接入和服务命令 | 指定版本识别或客户端目标目录 |
+| --limit <数量> | search | 限制结果数，为 1–20，默认 8 |
+| --strict | doctor、usage、lint | 严格模式，具体退出状态以对应命令为准 |
+
+\`\`\`bash
+daisu --version
 daisu data list
+daisu info Button --version 0.1.0-beta.1
+daisu info Button --version latest --format json
+daisu info Button --cwd /absolute/path/to/project
+\`\`\`
+
+顶层 --version 显示 CLI 自身版本；子命令后的 --version 选择组件资料。默认依次检查显式版本、项目实际安装版本、最近 package.json 依赖声明、随包 latest。不存在对应快照时明确报错，不把其他版本冒充当前 API。
+
+尚未安装的 file、workspace、Git 依赖无法确定精确版本，会给出警告并使用随包数据；先安装组件包或选择已收录版本。当前包使用 @daisu-ui/ui，历史 daisu-ui 快照的导入入口以返回的 importFrom 为准。
+
+## 数据校验与更新
+
+\`\`\`bash
 daisu data check
 daisu update
 daisu update --check
 \`\`\`
 
-查询、项目分析和本地 MCP 默认离线。data check 校验版本索引、数据结构和 SHA-256 摘要，不代表快照已与最新 UI 源码一致。update 默认只报告本地状态；只有 \`update --check\` 联网查询 CLI 版本，不自动安装。包尚未发布时返回 not-published；安装依赖及 npx 启动方式可能需要网络。
+data check 校验版本索引、结构和 SHA-256 摘要。update 默认只报告本地状态；--check 才联网查询 CLI 更新，不自动安装。升级 CLI 可重新执行 npm install -g @daisu-ui/cli@beta；升级后按 data list 核对实际收录的组件版本。
 
-## 命令与参数
+## 源码开发与资料同步
 
-下表来自真实命令注册。子命令的完整帮助使用 \`daisu <命令> --help\`。
+源码：[git@git.zilueit.com:daisu-ui/cli.git](https://git.zilueit.com/daisu-ui/cli)。源码用户可以构建后通过 node /absolute/path/to/cli/dist/index.js 使用，也可 npm pack 生成 tarball。
 
-${table(["命令", "用途", "选项"], commandRows)}
+本地按 DaiSu-UI/{cli,daisu-ui} 并列维护且依赖就绪时，正常构建自动完成 UI 组件资料 → CLI 快照、CLI 接入说明 → UI 文档站的双向同步。CLI 的 npm run dev 持续监听；UI 的 npm run ui:docs:dev 同时更新文档与必要的演示 Bundle。
 
-## 维护知识库与本站页面
+非同级目录通过 DAISU_UI_SOURCE / DAISU_UI_CLI_SOURCE 定位，DAISU_UI_AUTO_SYNC=0 关闭开发协作。单仓库仍能独立构建；CI 自动只读检查，不修补资料。安装后的查询不触发源码协作。
 
-### 本地开发自动同步
-
-两个仓库并列为 DaiSu-UI/cli 与 DaiSu-UI/daisu-ui，并安装开发依赖后，正常执行 CLI 或 UI 的 npm run build 会自动同步：生成组件说明、导出接入页面、提取离线快照并校验摘要。UI 的 ui:docs:build 也会执行该流程。
-
-\`\`\`bash
-npm run build
-npm run dev
-\`\`\`
-
-上面的 dev 在 CLI 仓库持续监听两端源码。UI 仓库的 npm run ui:docs:dev 则监听改动并重建文档；组件或 Demo 改动会重建演示 Bundle，刷新浏览器查看。无内容变化时保留快照时间和生成文件，Ctrl+C 停止监听。
-
-非同级目录可设置 DAISU_UI_SOURCE（CLI 定位 UI）或 DAISU_UI_CLI_SOURCE（UI 定位 CLI）；DAISU_UI_AUTO_SYNC=0 关闭开发协作。只检出一个仓库或同级仓库未安装依赖时，仍可使用已提交资料独立构建。CI 自动只读检查，不修补资料；若显式配置源码目录，需要准备两端依赖及 CLI 构建产物。
-
-这些行为仅作用于源码开发脚本；查询命令、MCP 和安装后的 CLI 始终使用随包数据，不触发源码协作或网络同步。
-
-### 手动同步与检查
-
-自动流程采用两个同步方向。排查或指定其他目录时，可在 CLI 仓库显式运行：
+需要指定目录或排查时，在 CLI 仓库运行：
 
 \`\`\`bash
 npm run sync -- --ui-dir /absolute/path/to/daisu-ui
 npm run docs:export -- --ui-dir /absolute/path/to/daisu-ui
 npm run sync -- --ui-dir /absolute/path/to/daisu-ui --check
 npm run docs:export -- --ui-dir /absolute/path/to/daisu-ui --check
+# 使用已安装的 CLI 直接做只读比较
+daisu docs export --ui-dir /absolute/path/to/daisu-ui --check
 \`\`\`
 
-| 修改内容 | 维护位置 | 同步方式 |
-| --- | --- | --- |
-| 组件 API、Demo、平台与 LLM 约束 | UI 仓库 | sync 提取为 CLI 版本快照 |
-| CLI 命令、MCP、客户端与消费端 Skill | CLI 仓库 | docs:export 导出本站接入页面 |
-| UI 维护者规范与 Lynx 技能 | UI 仓库 | 按 UI 仓库开发规则维护 |
-
-\`--check\` 严格只读，不更新数据、页面或同步锁。版本快照和索引提交到 CLI；四个生成页面及 cli-manifest.json 提交到 UI。单仓库构建检查本地页面摘要，不要求安装 CLI；本地检测到已就绪的协作仓库时自动同步。CLI 的导出一致性检查会重新读取命令和 MCP 注册，不能用 UI 的摘要检查代替。
-
-迁移 CLI 安装位置后，应重新查看接入计划并更新托管配置中的绝对入口。源码开发的自动协作不会更新消费项目已有的客户端配置。
-
-- [AI 总览](#/ai-guide) · [MCP 接入](#/ai-mcp) · [AI Skills](#/ai-skills)
+--check 严格只读。版本数据提交到 CLI，接入页面和摘要清单提交到 UI，不手工修改生成页。开发文档、CLI npm 发布、组件 npm 发布与业务 Bundle 分别执行。
 
 ${note}
 `,
@@ -382,7 +414,9 @@ daisu mcp print --client vscode
 daisu mcp print --client codex
 \`\`\`
 
-print 只输出配置，不写文件。下面的片段使用占位绝对路径，需替换 Node、CLI 入口和消费项目目录；目录含空格时保留为单个参数。合并服务条目到已有配置，不覆盖整个文件。
+下面展示全局安装 npm install -g @daisu-ui/cli@beta 后的简洁配置，使用 daisu mcp。客户端必须能在 PATH 找到 daisu；工作目录应为消费项目。需要固定目录时，args 使用 ["mcp", "--cwd", "/absolute/path/to/consumer-project"]。合并服务条目到已有配置，不覆盖整个文件。
+
+print 只输出配置，不写文件。默认生成本机 Node 和 CLI 的绝对入口及消费项目目录，适合编辑器无法读取全局 PATH 的情况；目录含空格时保留为单个参数。
 
 ### Cursor 与通用 JSON
 
@@ -408,7 +442,7 @@ ${config("codex")}
 
 独立启动可运行 \`daisu mcp\` 或 \`daisu mcp serve --cwd /absolute/path/to/consumer-project\`。服务没有 HTTP 页面或监听端口，启动后等待客户端消息；一般由客户端自动启动，无需提前开一个终端运行。
 
-默认 --runner local 使用当前安装的绝对入口。--runner global 生成 daisu mcp serve，要求客户端 PATH 能找到全局命令。包发布到 npm 后才可使用 --runner npx；首次启动可能联网，--pin 固定 CLI 版本，不能代替组件数据版本选择。
+默认 --runner local 使用当前安装的绝对入口。--runner global 生成 daisu mcp serve，要求客户端 PATH 能找到全局命令。--runner npx 可从 npm 启动，首次启动可能联网；使用 --pin 固定当前或指定 CLI 版本，不能代替组件数据版本选择。
 
 在服务启动命令上添加 \`--version <组件版本>\` 可固定默认数据；工具调用的 version 参数可逐次选择。未显式指定时按消费项目依赖选择快照，先调用 daisu_status 核对来源。修改了本地 UI 源码不会改变已收录数据；重新同步和安装 CLI 数据后重启服务。
 
@@ -485,9 +519,17 @@ ${note}
 
 消费端 Skill 为 Agent 提供 Daisu UI 的查询顺序、ReactLynx 编写约束和验证要求。MCP 提供真正的工具调用能力；Instructions 将项目规则提供给不同客户端。三者可一起安装，也可按项目选择。
 
+## 内置技能
+
+| Skill | 内容 | 适用场景 | 源文件 |
+| --- | --- | --- | --- |
+| daisu-ui | 版本核对、API/示例查询、ReactLynx 约束与验证要求 | 组件选型、页面生成、主题和常见组件用法排查 | [SKILL.md](https://git.zilueit.com/daisu-ui/cli/blob/main/skills/daisu-ui/SKILL.md) |
+
+当前消费端技能随 [@daisu-ui/cli](https://www.npmjs.com/package/@daisu-ui/cli) 分发，通过下方 agent init 安装。UI 维护者的 Lynx 技能见本页末尾，分别服务于消费项目与组件库开发。
+
 ## 安装前准备
 
-先按 [CLI 工具](#/ai-cli) 安装或构建当前版本。在需要生成代码的消费项目执行接入命令，不要把 CLI 仓库作为目标项目。源码用户用 \`node /absolute/path/to/cli/dist/index.js\` 替代 daisu；项目开发依赖用户用 \`npx --no-install daisu\`。
+先执行 npm install -g @daisu-ui/cli@beta，或按 [CLI 工具](#/ai-cli) 使用项目依赖和源码入口。在需要生成代码的消费项目执行接入命令，不要把 CLI 仓库作为目标项目。源码用户用 \`node /absolute/path/to/cli/dist/index.js\` 替代 daisu；项目开发依赖用户用 \`npx --no-install daisu\`。
 
 ## 一次接入
 
