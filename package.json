@@ -1,0 +1,79 @@
+{
+  "name": "@daisu-ui/cli",
+  "version": "0.1.0-beta.2",
+  "description": "Daisu UI 的离线组件知识库、ReactLynx 项目分析、MCP 与 Agent 接入工具",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "daisu": "dist/index.js"
+  },
+  "main": "./dist/api.js",
+  "types": "./dist/api.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/api.d.ts",
+      "import": "./dist/api.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "data",
+    "skills",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "extract": "node scripts/extract.mjs",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "check:package": "node scripts/check-package.mjs",
+    "prepack": "npm run build && npm run data:check",
+    "format": "prettier --write src scripts tests README.md AGENTS.md CHANGELOG.md THIRD_PARTY_NOTICES.md skills package.json tsconfig.json .gitlab-ci.yml",
+    "format:check": "prettier --check src scripts tests README.md AGENTS.md CHANGELOG.md THIRD_PARTY_NOTICES.md skills package.json tsconfig.json .gitlab-ci.yml",
+    "sync": "node scripts/sync.mjs",
+    "data:check": "node scripts/validate-data.mjs",
+    "verify": "node scripts/verify.mjs",
+    "release:check": "node scripts/check-release.mjs",
+    "docs:export": "npm run build && node dist/index.js docs export",
+    "dev": "node scripts/auto-sync.mjs --watch",
+    "sync:auto": "node scripts/auto-sync.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "commander": "^14.0.0",
+    "jsonc-parser": "^3.3.1",
+    "semver": "^7.7.3",
+    "smol-toml": "^1.4.2",
+    "typescript": "^6.0.3",
+    "zod": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "@types/semver": "^7.7.1",
+    "prettier": "^3.10.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "beta"
+  },
+  "keywords": [
+    "daisu-ui",
+    "reactlynx",
+    "lynx",
+    "cli",
+    "mcp",
+    "agent",
+    "offline"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@git.zilueit.com/daisu-ui/cli.git"
+  }
+}

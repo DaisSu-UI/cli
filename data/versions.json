@@ -1,0 +1,11 @@
+{
+  "latest": "0.1.0-beta.2",
+  "versions": [
+    "0.1.0-beta.2",
+    "0.1.0-beta.1"
+  ],
+  "digests": {
+    "0.1.0-beta.1": "11136a781dde731deb402c3f3b4daaee0f813602adf7f76d3d1580f5f2720bfc",
+    "0.1.0-beta.2": "e7970251605e966f6a1e7bac7c2151feecda49d5e1c9787d502231359ab9f07b"
+  }
+}

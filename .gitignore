@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+artifacts/
+*.tgz
+.env*
+
+.npm/
+data/.sync.lock
+data/*.tmp

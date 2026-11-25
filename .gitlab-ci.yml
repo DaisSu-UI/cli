@@ -1,0 +1,24 @@
+# 与现有 Daisu UI 仓库一致，兼容旧版 GitLab，不使用 rules/needs。
+image: node:24-bookworm
+stages:
+  - verify
+cache:
+  key: daisu-ui-cli-npm
+  paths:
+    - .npm/
+before_script:
+  - export npm_config_cache="$CI_PROJECT_DIR/.npm"
+  - npm ci --prefer-offline --no-audit --no-fund
+verify:
+  stage: verify
+  script:
+    - npm run verify
+    - if [ -n "${DAISU_UI_SOURCE:-}" ]; then npm run sync -- --ui-dir "$DAISU_UI_SOURCE" --check; fi
+    - if [ -n "${DAISU_UI_SOURCE:-}" ]; then node dist/index.js docs export --ui-dir "$DAISU_UI_SOURCE" --check; fi
+  only:
+    - branches
+    - /^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$/
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - artifacts/*.tgz
