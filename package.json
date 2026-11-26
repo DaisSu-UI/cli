@@ -78,10 +78,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://gitcode.com/daisu/cli.git"
+    "url": "git+https://github.com/DaisSu-UI/cli.git"
   },
-  "homepage": "https://gitcode.com/daisu/cli#readme",
+  "homepage": "https://github.com/DaisSu-UI/cli#readme",
   "bugs": {
-    "url": "https://gitcode.com/daisu/cli/issues"
+    "url": "https://github.com/DaisSu-UI/cli/issues"
   }
 }
