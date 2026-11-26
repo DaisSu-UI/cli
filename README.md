@@ -236,7 +236,7 @@ daisu list --version latest --format json
 daisu data check
 ```
 
-CLI `0.1.0-beta.4` 收录当前 `@daisu-ui/ui@0.1.0-beta.3` 及历史 `daisu-ui` 快照。默认优先识别项目实际安装版本，再检查依赖声明，最后使用随包最新数据；找不到对应版本会明确报错。尚未安装的本地路径或 Git 依赖无法确定版本时，会给出提示。历史版本的导入路径以查询结果中的 `importFrom` 为准。
+CLI `0.1.0-beta.5` 收录当前 `@daisu-ui/ui@0.1.0-beta.3` 及历史 `daisu-ui` 快照。默认优先识别项目实际安装版本，再检查依赖声明，最后使用随包最新数据；找不到对应版本会明确报错。尚未安装的本地路径或 Git 依赖无法确定版本时，会给出提示。历史版本的导入路径以查询结果中的 `importFrom` 为准。
 
 查询支持 `--format text|json|markdown`。结构化结果写入 stdout，错误和提示写入 stderr；`lint` 有错误时返回非零退出码，`--strict` 将警告也视为失败。`daisu --version` 是 CLI 版本，子命令的 `--version <值>` 是组件数据版本。
 
@@ -293,7 +293,7 @@ daisu mcp serve
       "command": "npx",
       "args": [
         "-y",
-        "@daisu-ui/cli@0.1.0-beta.4",
+        "@daisu-ui/cli@0.1.0-beta.5",
         "mcp",
         "serve",
         "--cwd",
