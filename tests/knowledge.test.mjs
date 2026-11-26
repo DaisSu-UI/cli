@@ -152,3 +152,23 @@ test("CLI changelog supports release and component filters", () => {
     ),
   );
 });
+
+test("every bundled public API has guidance and callable arguments are not component props", () => {
+  const data = loadKnowledge({ version: "latest" }).data;
+  assert.deepEqual(
+    data.components
+      .filter((component) => !component.doc?.trim())
+      .map((component) => component.name),
+    [],
+  );
+  for (const name of ["usePressState", "useRouterSnapshot", "calendarValues"]) {
+    const entry = findComponent(name, data);
+    assert.equal(entry.props.length, 0, name);
+    assert(entry.doc.includes(name));
+  }
+  assert(
+    findComponent("SyncedInput", data).props.some(
+      (prop) => prop.name === "value",
+    ),
+  );
+});

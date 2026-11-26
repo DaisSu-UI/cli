@@ -389,8 +389,9 @@ for (const [name, { symbol, from }] of symbols) {
   const propsName = name === "Tabs" ? "StandardTabsProps" : `${name}Props`;
   let propsType;
   const typeSymbol = symbols.get(propsName)?.symbol;
-  if (typeSymbol) propsType = checker.getDeclaredTypeOfSymbol(typeSymbol);
-  else
+  if (kind === "component" && typeSymbol)
+    propsType = checker.getDeclaredTypeOfSymbol(typeSymbol);
+  else if (kind === "component")
     propsType =
       valueType.getCallSignatures()[0]?.parameters[0] &&
       checker.getTypeOfSymbolAtLocation(

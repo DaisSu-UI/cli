@@ -215,6 +215,7 @@ export function relevantChange(kind, name) {
     return path === "docs/ui/components/button.md";
   if (
     path === "docs/ui/component-sources.json" ||
+    path === "docs/ui/llms.txt" ||
     /^apps\/docs\/ai\/(overview|cli|mcp|skills)\.md$/.test(path) ||
     path === "apps/docs/ai/cli-manifest.json"
   )

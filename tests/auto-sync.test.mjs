@@ -139,6 +139,7 @@ test("watch filters exclude outputs and still react to source, API, examples and
     ["cli", "dist/index.js"],
     ["ui", "apps/docs/dist/index.html"],
     ["ui", "docs/ui/component-sources.json"],
+    ["ui", "docs/ui/llms.txt"],
     ["ui", "docs/ui/components/layout.md"],
     ["ui", "apps/docs/ai/cli-manifest.json"],
     ["ui", "apps/docs/ai/mcp.md"],

@@ -98,7 +98,7 @@ Daisu UI 提供面向 ReactLynx 的组件文档、版本化离线知识库、CLI
 
 ### 第一次使用
 
-CLI 当前版本为 \`${cliPackage.version}\`，在 npmjs 使用 beta 标签。先按 [CLI 安装说明](#/ai-cli) 安装 @daisu-ui/cli@beta；也可从 Git 源码构建或安装本地 tarball。CLI 安装完成后，下面的命令均可离线查询；组件包和 CLI 是两个独立的安装项。
+CLI 在 npmjs 使用 beta 标签，安装后的实际版本用 daisu --version 核对。先按 [CLI 安装说明](#/ai-cli) 安装 @daisu-ui/cli@beta；也可从 Git 源码构建或安装本地 tarball。CLI 安装完成后，下面的命令均可离线查询；组件包和 CLI 是两个独立的安装项。
 
 在消费项目执行：
 
@@ -124,7 +124,7 @@ npm install -g @daisu-ui/cli@beta
 
 ${config("cursor")}
 
-客户端需要能在 PATH 中找到 daisu，并在消费项目目录启动服务。需要固定项目时，在 args 中加上 --cwd 与消费项目绝对路径；VS Code、Codex 使用各自的配置格式，详见 [MCP 接入](#/ai-mcp)。
+客户端需要能在 PATH 中找到 daisu，并在消费项目目录启动服务；先用 data list 和 doctor 核对所需组件版本是否已收录。缺失时按 [CLI 版本匹配步骤](#/ai-cli?section=ai-cli-版本缺失时的处理) 处理。需要固定项目时，在 args 中加上 --cwd 与消费项目绝对路径；VS Code、Codex 使用各自的配置格式，详见 [MCP 接入](#/ai-mcp)。
 
 ### 希望 Agent 完成开发任务
 
@@ -207,7 +207,7 @@ npm install -g @daisu-ui/cli@beta
 daisu --version
 \`\`\`
 
-安装完成后可使用 daisu 命令。需要固定 CLI 版本时，将 beta 换为具体版本，例如 ${cliPackage.version}。
+安装完成后可使用 daisu 命令。需要固定 CLI 版本时，先用 npm view @daisu-ui/cli versions --json 查询已发布列表，再将 beta 换为其中的精确版本。
 
 不全局安装也可使用：
 
@@ -329,7 +329,7 @@ daisu agent doctor --client cursor
 | --version <版本> | 组件查询、项目分析及 MCP 服务 | 选择已收录组件版本或范围，latest 表示随包最新快照 |
 | --cwd <目录> | 支持该选项的查询、接入和服务命令 | 指定版本识别或客户端目标目录 |
 | --limit <数量> | search | 限制结果数，为 1–20，默认 8 |
-| --strict | doctor、usage、lint | 严格模式，具体退出状态以对应命令为准 |
+| --strict | lint | 将 lint 警告也视为失败；doctor 和 usage 不额外产生 lint 警告诊断 |
 
 \`\`\`bash
 daisu --version
@@ -342,6 +342,26 @@ daisu info Button --cwd /absolute/path/to/project
 顶层 --version 显示 CLI 自身版本；子命令后的 --version 选择组件资料。默认依次检查显式版本、项目实际安装版本、最近 package.json 依赖声明、随包 latest。不存在对应快照时明确报错，不把其他版本冒充当前 API。
 
 尚未安装的 file、workspace、Git 依赖无法确定精确版本，会给出警告并使用随包数据；先安装组件包或选择已收录版本。当前包使用 @daisu-ui/ui，历史 daisu-ui 快照的导入入口以返回的 importFrom 为准。
+
+## 版本缺失时的处理
+
+UI 包和 CLI 的 npm 版本分别发布，网站或 Git 中的新快照不会自动进入已经安装的 CLI。先执行 daisu data list；若目标版本不存在，更新到收录它的 CLI 后再次核对。
+
+例如，npm 的 @daisu-ui/cli@0.1.0-beta.3 随包数据截止 UI 0.1.0-beta.3，而 CLI Git 仓库已收录 UI 0.1.0-beta.4。使用 UI beta.4 时需要包含 beta.4 快照的后续 CLI，或从 Git 源码构建。--version latest 只选择已有快照，不能让旧包获得新 API。
+
+从 Git 构建后，在消费项目用构建入口查询或重新配置客户端：
+
+\`\`\`bash
+git clone git@git.zilueit.com:daisu-ui/cli.git
+cd cli
+npm ci
+npm run build
+node dist/index.js data list
+node /absolute/path/to/cli/dist/index.js info Button --cwd /absolute/path/to/project
+node /absolute/path/to/cli/dist/index.js mcp init --client cursor --dry-run --cwd /absolute/path/to/project
+\`\`\`
+
+确认计划后再执行 init --yes；不能把其他组件版本的参数当作当前版本的用法。消费项目也可使用与已收录快照匹配的组件版本。维护者需单独发布新 CLI 才能把新增快照分发给 npm 用户。
 
 ## 数据校验与更新
 
@@ -505,7 +525,7 @@ ${table(
 ## 迁移与排查
 
 - 找不到命令：使用源码入口绝对路径，或检查 Node 与 CLI 的安装位置。迁移目录后重新预览 init，不要保留旧入口。
-- 版本缺失：先调用 daisu_status 或执行 daisu data list，补充对应快照；不要强制使用不匹配的 API。
+- 版本缺失：先调用 daisu_status 或执行 daisu data list，再使用收录目标版本的 CLI 或 Git 源码入口，详见 [版本匹配步骤](#/ai-cli?section=ai-cli-版本缺失时的处理)。
 - 项目诊断目录不对：项目范围配置中的 --cwd 应指向消费项目，不是 CLI 或 UI 仓库。
 - 已配置但会话没有工具：检查信任、启用状态和工具过滤；重启或重新加载客户端后实际调用验证。
 - 已有同名服务：先确认原配置归属。旧的 UI 仓库 apps/mcp 已退役，新服务统一使用 CLI 的 daisu_* 工具与 daisu:// 资源；手工配置需先备份并合并替换同名服务。
