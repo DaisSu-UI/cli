@@ -1,6 +1,6 @@
 {
   "name": "@daisu-ui/cli",
-  "version": "0.1.0-beta.6",
+  "version": "0.1.0-beta.7",
   "description": "Daisu UI 的离线组件知识库、ReactLynx 项目分析、MCP 与 Agent 接入工具",
   "license": "MIT",
   "type": "module",
