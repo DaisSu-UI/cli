@@ -5,6 +5,7 @@ import {
   rmSync,
   existsSync,
   readFileSync,
+  writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -33,18 +34,48 @@ for (const name of [
 assert(!files.some((name) => /^(node_modules|tests|src|\.env)/.test(name)));
 const consumer = mkdtempSync(join(tmpdir(), "daisu-packed-consumer-"));
 try {
+  const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+  const archive = resolve(root, "artifacts", result.filename);
+  const metadata = {
+    name: "daisu-cli-packed-consumer",
+    private: true,
+    dependencies: { [pkg.name]: `file:${archive}` },
+  };
+  const lock = JSON.parse(
+    readFileSync(join(root, "package-lock.json"), "utf8"),
+  );
+  lock.name = metadata.name;
+  delete lock.version;
+  lock.packages[""] = metadata;
+  lock.packages[`node_modules/${pkg.name}`] = {
+    version: pkg.version,
+    resolved: metadata.dependencies[pkg.name],
+    integrity: result.integrity,
+    dependencies: pkg.dependencies,
+    bin: pkg.bin,
+    engines: pkg.engines,
+  };
+  writeFileSync(
+    join(consumer, "package.json"),
+    JSON.stringify(metadata, null, 2),
+  );
+  writeFileSync(
+    join(consumer, "package-lock.json"),
+    JSON.stringify(lock, null, 2),
+  );
+  // npm ci caches locked tarballs without necessarily caching registry metadata.
+  // Reuse the reviewed graph so a new Runner can validate the package offline.
   execFileSync(
     "npm",
     [
-      "install",
+      "ci",
       "--offline",
       "--ignore-scripts",
       "--no-audit",
       "--no-fund",
-      "--package-lock=false",
+      "--omit=dev",
       "--prefix",
       consumer,
-      resolve(root, "artifacts", result.filename),
     ],
     { cwd: consumer, stdio: ["ignore", "pipe", "pipe"] },
   );
