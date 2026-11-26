@@ -15,12 +15,12 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@daisu-ui/cli"><img src="https://img.shields.io/npm/v/%40daisu-ui%2Fcli?style=flat-square&amp;color=1c64fd&amp;label=npm" alt="npm version"></a>
   <a href="https://www.npmjs.com/package/@daisu-ui/cli"><img src="https://img.shields.io/badge/downloads-new%20package-868e96?style=flat-square" alt="npm downloads: new package"></a>
-  <a href="https://git.zilueit.com/daisu-ui/cli/-/pipelines"><img src="https://img.shields.io/badge/CI-GitLab-fc6d26?style=flat-square" alt="GitLab CI"></a>
-  <a href="https://git.zilueit.com/daisu-ui/cli/-/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-74a600?style=flat-square" alt="MIT license"></a>
+  <a href="https://gitcode.com/daisu/cli"><img src="https://img.shields.io/badge/source-GitCode-fc6d26?style=flat-square" alt="GitCode source"></a>
+  <a href="https://gitcode.com/daisu/cli/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-74a600?style=flat-square" alt="MIT license"></a>
 </p>
 
 <p align="center">
-  <a href="https://git.zilueit.com/daisu-ui/daisu-ui">组件文档</a>
+  <a href="https://gitcode.com/daisu/ui">组件库</a>
   · <a href="#-30-秒接入">快速开始</a>
   · <a href="#agent-接入">Agent 接入</a>
   · <a href="#在终端使用">CLI</a>
@@ -284,7 +284,7 @@ daisu mcp serve
 
 ### 手动配置
 
-通用 `mcpServers` 配置示例，版本固定为当前 CLI：
+通用 `mcpServers` 配置示例，使用 npm 的 `latest` 版本；需要固定已安装版本时使用 `daisu mcp print --client cursor --runner npx --pin`：
 
 ```json
 {
@@ -293,7 +293,7 @@ daisu mcp serve
       "command": "npx",
       "args": [
         "-y",
-        "@daisu-ui/cli@0.1.0-beta.5",
+        "@daisu-ui/cli@latest",
         "mcp",
         "serve",
         "--cwd",
@@ -319,7 +319,7 @@ VS Code 使用 `servers` 根字段，Codex 使用 TOML 的 `mcp_servers.daisu-ui
 ## 开发与贡献
 
 ```bash
-git clone git@git.zilueit.com:daisu-ui/cli.git
+git clone git@gitcode.com:daisu/cli.git
 cd cli
 npm ci
 npm run build
@@ -339,7 +339,7 @@ npm run verify
 
 `verify` 包括格式、类型、测试、数据摘要、发布版本和 tarball 独立安装验证。测试使用临时目录，不改真实编辑器配置。显式维护入口仍为 `npm run sync -- --ui-dir <UI仓库>` 与 `npm run docs:export -- --ui-dir <UI仓库>`；数据同步不自动拉取 Git。
 
-CI 兼容现有 GitLab：developer 用于开发、main 用于发布，普通推送执行验证；已合入 main 的版本标签自动发布经过校验的 tarball。发布凭据保存在受保护的 GitLab NPM_TOKEN 变量中。分支、渠道、Runner 和重试方式见 [自动发布说明](https://git.zilueit.com/daisu-ui/cli/-/blob/main/docs/releasing.md)。`AGENTS.md` 管理仓库开发规则；消费端 Skill 通过 `agent init` 安装到使用者项目。
+源码公开托管于 [GitCode](https://gitcode.com/daisu/cli)，CI 发布沿用现有 GitLab：developer 用于开发、main 用于发布，普通推送执行验证；已合入 main 的版本标签自动发布经过校验的 tarball。发布凭据保存在受保护的 GitLab NPM_TOKEN 变量中。分支、渠道、Runner 和重试方式见 [自动发布说明](https://gitcode.com/daisu/cli/blob/main/docs/releasing.md)。`AGENTS.md` 管理仓库开发规则；消费端 Skill 通过 `agent init` 安装到使用者项目。
 
 ## 当前边界
 
@@ -350,4 +350,4 @@ CI 兼容现有 GitLab：developer 用于开发、main 用于发布，普通推�
 
 ## License
 
-[MIT](https://git.zilueit.com/daisu-ui/cli/-/blob/main/LICENSE)。第三方说明见 [THIRD_PARTY_NOTICES.md](https://git.zilueit.com/daisu-ui/cli/-/blob/main/THIRD_PARTY_NOTICES.md)。
+[MIT](https://gitcode.com/daisu/cli/blob/main/LICENSE)。第三方说明见 [THIRD_PARTY_NOTICES.md](https://gitcode.com/daisu/cli/blob/main/THIRD_PARTY_NOTICES.md)。
