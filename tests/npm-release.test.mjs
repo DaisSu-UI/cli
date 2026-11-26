@@ -25,6 +25,13 @@ for (const key of [
   "NODE_AUTH_TOKEN",
   "npm_config_otp",
   "NPM_CONFIG_OTP",
+  "GITHUB_ACTIONS",
+  "GITHUB_REPOSITORY",
+  "GITHUB_EVENT_NAME",
+  "GITHUB_REF",
+  "CI_COMMIT_TAG",
+  "CI_COMMIT_REF_PROTECTED",
+  "CI_PROJECT_PATH",
 ])
   delete env[key];
 function fixture(t, version = "1.0.0-beta.1") {
@@ -170,6 +177,51 @@ test("CI needs the exact protected tag and cannot override its channel", async (
     }),
     /NPM_TOKEN/,
   );
+});
+test("GitHub releases require the canonical repository and an exact tag push", async (t) => {
+  const f = fixture(t);
+  const ci = {
+    ...env,
+    CI: "true",
+    GITHUB_ACTIONS: "true",
+    GITHUB_REPOSITORY: "DaisSu-UI/cli",
+    GITHUB_EVENT_NAME: "push",
+    GITHUB_REF: `refs/tags/v${f.manifest.version}`,
+    CI_COMMIT_TAG: `v${f.manifest.version}`,
+    NPM_TOKEN: "npm_TEST_ONLY_NOT_A_SECRET",
+  };
+  let published = false;
+  const result = await publishNpmRelease({
+    root: f.root,
+    env: ci,
+    args: [],
+    fetcher: absent,
+    execute: (_command, args) => {
+      published = true;
+      assert(args.includes(f.archive));
+    },
+  });
+  assert(published);
+  assert.equal(result.status, "published");
+  for (const patch of [
+    { GITHUB_REPOSITORY: "someone/cli" },
+    { GITHUB_EVENT_NAME: "pull_request" },
+    { GITHUB_EVENT_NAME: "workflow_dispatch" },
+    { GITHUB_REF: "refs/heads/main" },
+    { GITHUB_REF: "refs/tags/v99.0.0" },
+    { CI_COMMIT_TAG: "v99.0.0" },
+  ]) {
+    await assert.rejects(
+      publishNpmRelease({
+        root: f.root,
+        env: { ...ci, ...patch },
+        args: [],
+        fetcher: () => assert.fail("Invalid CI must not contact npm."),
+        execute: () => assert.fail("Invalid CI must not publish."),
+      }),
+      /GitHub Actions|对应版本 Tag/,
+    );
+  }
 });
 test("dry-run publishes nothing, identical retries skip and different published bytes fail", async (t) => {
   const f = fixture(t);

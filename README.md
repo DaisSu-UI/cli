@@ -339,7 +339,7 @@ npm run verify
 
 `verify` 包括格式、类型、测试、数据摘要、发布版本和 tarball 独立安装验证。测试使用临时目录，不改真实编辑器配置。显式维护入口仍为 `npm run sync -- --ui-dir <UI仓库>` 与 `npm run docs:export -- --ui-dir <UI仓库>`；数据同步不自动拉取 Git。
 
-源码公开托管于 [GitHub](https://github.com/DaisSu-UI/cli)，CI 发布沿用现有 GitLab：developer 用于开发、main 用于发布，普通推送执行验证；已合入 main 的版本标签自动发布经过校验的 tarball。发布凭据保存在受保护的 GitLab NPM_TOKEN 变量中。分支、渠道、Runner 和重试方式见 [自动发布说明](https://github.com/DaisSu-UI/cli/blob/main/docs/releasing.md)。`AGENTS.md` 管理仓库开发规则；消费端 Skill 通过 `agent init` 安装到使用者项目。
+源码与默认远程仓库托管于 [GitHub](https://github.com/DaisSu-UI/cli)。[GitHub Actions](https://github.com/DaisSu-UI/cli/actions) 对 developer、main 和 PR 执行验证；推送与 CLI 版本一致、且已合入 main 的 `v<版本>` 标签后，自动发布经过校验的同一份 tarball。发布步骤读取仓库 Actions Secret `NPM_TOKEN`，验证与打包步骤不接触发布凭据。分支、渠道、首次设置和重试方式见 [自动发布说明](https://github.com/DaisSu-UI/cli/blob/main/docs/releasing.md)。`AGENTS.md` 管理仓库开发规则；消费端 Skill 通过 `agent init` 安装到使用者项目。
 
 ## 当前边界
 

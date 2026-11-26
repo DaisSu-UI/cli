@@ -1,0 +1,67 @@
+name: CLI CI and npm release
+
+on:
+  push:
+    branches: [main, developer]
+    tags: ["v*"]
+  pull_request:
+    branches: [main, developer]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DAISU_UI_AUTO_SYNC: "0"
+  NODE_OPTIONS: --max-old-space-size=2048
+  CI_COMMIT_TAG: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+
+jobs:
+  verify:
+    name: Verify and package
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run verify
+      - run: npm run npm:prepare
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm-${{ github.sha }}
+          path: |
+            artifacts/*.tgz
+            artifacts/npm-release.json
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: Publish to npm
+    if: github.event_name == 'push' && github.ref_type == 'tag' && github.repository == 'DaisSu-UI/cli'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@v4
+        with:
+          name: npm-${{ github.sha }}
+          path: artifacts
+      - run: npm run npm:publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

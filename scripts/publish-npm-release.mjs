@@ -61,6 +61,23 @@ export function loadRelease({ root = repositoryRoot, env = process.env } = {}) {
     "产物完整性校验失败。",
   );
   if (env.CI) {
+    if (env.GITHUB_ACTIONS === "true") {
+      assert.equal(
+        env.GITHUB_REPOSITORY,
+        "DaisSu-UI/cli",
+        "GitHub Actions 仅发布 DaisSu-UI/cli 项目。",
+      );
+      assert.equal(
+        env.GITHUB_EVENT_NAME,
+        "push",
+        "GitHub Actions 仅允许由版本标签推送触发发布。",
+      );
+      assert.equal(
+        env.GITHUB_REF,
+        `refs/tags/v${pkg.version}`,
+        "GitHub Actions 仅允许从对应版本 Tag 发布。",
+      );
+    }
     assert.equal(
       env.CI_COMMIT_TAG,
       `v${pkg.version}`,
@@ -142,7 +159,7 @@ export async function publishNpmRelease({
   }
   assert(
     !env.CI || env.NPM_TOKEN,
-    "请在 CLI 项目 GitLab Secret variables 中配置受保护的 NPM_TOKEN（Read and write，Bypass 2FA）。",
+    "请在 CI 的 Secrets 中配置 NPM_TOKEN（Read and write，Bypass 2FA）。",
   );
   const temporary = mkdtempSync(join(tmpdir(), "daisu-cli-npm-auth-"));
   const childEnv = { ...env };
