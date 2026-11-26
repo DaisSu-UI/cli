@@ -12,6 +12,7 @@ cache:
   paths:
     - .npm/
 before_script:
+  - unset NPM_TOKEN NODE_AUTH_TOKEN
   - export npm_config_cache="$CI_PROJECT_DIR/.npm"
   - node scripts/check-release-source.mjs
   - npm ci --prefer-offline --no-audit --no-fund

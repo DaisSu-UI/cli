@@ -20,6 +20,13 @@ import {
   publishNpmRelease,
 } from "../scripts/publish-npm-release.mjs";
 const env = { ...process.env, CI: "", DAISU_UI_AUTO_SYNC: "0" };
+for (const key of [
+  "NPM_TOKEN",
+  "NODE_AUTH_TOKEN",
+  "npm_config_otp",
+  "NPM_CONFIG_OTP",
+])
+  delete env[key];
 function fixture(t, version = "1.0.0-beta.1") {
   const parent = mkdtempSync(join(tmpdir(), "daisu-ci-publish-"));
   t.after(() => rmSync(parent, { recursive: true, force: true }));
@@ -122,6 +129,8 @@ test("main ancestry check refreshes the remote and blocks development-only tags"
 });
 test("CI needs the exact protected tag and cannot override its channel", async (t) => {
   const f = fixture(t);
+  const neverPublish = () =>
+    assert.fail("This test must never execute npm publish.");
   const ci = {
     ...env,
     CI: "true",
@@ -147,11 +156,18 @@ test("CI needs the exact protected tag and cannot override its channel", async (
       env: ci,
       args: ["--tag", "latest"],
       fetcher: absent,
+      execute: neverPublish,
     }),
     /不接受/,
   );
   await assert.rejects(
-    publishNpmRelease({ root: f.root, env: ci, args: [], fetcher: absent }),
+    publishNpmRelease({
+      root: f.root,
+      env: ci,
+      args: [],
+      fetcher: absent,
+      execute: neverPublish,
+    }),
     /NPM_TOKEN/,
   );
 });
