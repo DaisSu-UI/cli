@@ -152,7 +152,7 @@ daisu agent init --client claude --with skill,instructions --yes
 请在当前项目接入 Daisu UI。
 先使用 daisu agent list 确认客户端，再用 agent init --dry-run 查看变更。
 接入后运行 agent doctor，并在实际客户端调用 daisu_status 和 daisu_list。
-生成 ReactLynx 代码前查询真实 API、文档和示例，说明目标平台的能力边界。
+生成 ReactLynx 代码前查询真实 API、文档和示例，说明目标平台的能力边界。UI `0.1.0-beta.6` 的 Bundle 目标为 Lynx 4.0、类型基线为 `@lynx-js/types@4.0.0`；历史版本按各自快照核对。
 完成后运行当前项目自己的类型检查、测试和构建。
 ```
 
@@ -236,7 +236,7 @@ daisu list --version latest --format json
 daisu data check
 ```
 
-当前 Git 仓库已收录 `@daisu-ui/ui@0.1.0-beta.4` 及历史快照；已发布的 npm CLI 按各自版本携带数据，不随 Git 自动更新，实际收录范围用 `daisu data list` 核对。默认优先识别项目实际安装版本，再检查依赖声明，最后使用随包最新数据；找不到对应版本会明确报错。尚未安装的本地路径或 Git 依赖无法确定版本时，会给出提示。历史版本的导入路径以查询结果中的 `importFrom` 为准。
+当前 Git 仓库已收录 `@daisu-ui/ui@0.1.0-beta.6` 及历史快照；已发布的 npm CLI 按各自版本携带数据，不随 Git 自动更新，实际收录范围用 `daisu data list` 核对。默认优先识别项目实际安装版本，再检查依赖声明，最后使用随包最新数据；找不到对应版本会明确报错。尚未安装的本地路径或 Git 依赖无法确定版本时，会给出提示。历史版本的导入路径以查询结果中的 `importFrom` 为准。
 
 查询支持 `--format text|json|markdown`。JSON 结果写入 stdout，提示包含在 warnings 字段中；非 JSON 模式将提示写入 stderr，错误仍写入 stderr；`lint` 有错误时返回非零退出码，`--strict` 将警告也视为失败。`daisu --version` 是 CLI 版本，子命令的 `--version <值>` 是组件数据版本。
 

@@ -98,7 +98,7 @@ Daisu UI 提供面向 ReactLynx 的组件文档、版本化离线知识库、CLI
 
 ### 第一次使用
 
-CLI 在 npmjs 使用 beta 标签，安装后的实际版本用 daisu --version 核对。先按 [CLI 安装说明](#/ai-cli) 安装 @daisu-ui/cli@beta；也可从 Git 源码构建或安装本地 tarball。CLI 安装完成后，下面的命令均可离线查询；组件包和 CLI 是两个独立的安装项。
+CLI 在 npmjs 使用 beta 标签，安装后的实际版本用 daisu --version 核对。先按 [CLI 安装说明](#/ai-cli) 安装 @daisu-ui/cli@latest；也可从 Git 源码构建或安装本地 tarball。CLI 安装完成后，下面的命令均可离线查询；组件包和 CLI 是两个独立的安装项。
 
 在消费项目执行：
 
@@ -117,7 +117,7 @@ daisu demo Input basic
 先全局安装已发布的 CLI：
 
 \`\`\`bash
-npm install -g @daisu-ui/cli@beta
+npm install -g @daisu-ui/cli@latest
 \`\`\`
 
 在支持 mcpServers 的客户端中添加以下配置，由客户端启动服务：
@@ -203,7 +203,7 @@ ${note}
 需要 Node.js >=20.19.0。当前发布在 npmjs，预发布建议显式安装 beta 标签：
 
 \`\`\`bash
-npm install -g @daisu-ui/cli@beta
+npm install -g @daisu-ui/cli@latest
 daisu --version
 \`\`\`
 
@@ -212,9 +212,9 @@ daisu --version
 不全局安装也可使用：
 
 \`\`\`bash
-npx --yes @daisu-ui/cli@beta info Button
+npx --yes @daisu-ui/cli@latest info Button
 # 或安装为消费项目的开发依赖
-npm install --save-dev @daisu-ui/cli@beta
+npm install --save-dev @daisu-ui/cli@latest
 npx --no-install daisu info Button
 \`\`\`
 
@@ -347,7 +347,7 @@ daisu info Button --cwd /absolute/path/to/project
 
 UI 包和 CLI 的 npm 版本分别发布，网站或 Git 中的新快照不会自动进入已经安装的 CLI。先执行 daisu data list；若目标版本不存在，更新到收录它的 CLI 后再次核对。
 
-例如，npm 的 @daisu-ui/cli@0.1.0-beta.3 随包数据截止 UI 0.1.0-beta.3，而 CLI Git 仓库已收录 UI 0.1.0-beta.4。使用 UI beta.4 时需要包含 beta.4 快照的后续 CLI，或从 Git 源码构建。--version latest 只选择已有快照，不能让旧包获得新 API。
+项目升级 UI 后，需安装收录该精确版本快照的 CLI，或从包含该快照的 Git 源码构建。--version latest 只选择当前 CLI 已有的快照，不能让旧包获得新 API。Bundle 引擎目标与类型依赖也按所选 UI 版本的说明核对，不从工具自身版本推断。
 
 从 Git 构建后，在消费项目用构建入口查询或重新配置客户端：
 
@@ -371,7 +371,7 @@ daisu update
 daisu update --check
 \`\`\`
 
-data check 校验版本索引、结构和 SHA-256 摘要。update 默认只报告本地状态；--check 才联网查询 CLI 更新，不自动安装。升级 CLI 可重新执行 npm install -g @daisu-ui/cli@beta；升级后按 data list 核对实际收录的组件版本。
+data check 校验版本索引、结构和 SHA-256 摘要。update 默认只报告本地状态；--check 才联网查询 CLI 更新，不自动安装。升级 CLI 可重新执行 npm install -g @daisu-ui/cli@latest；升级后按 data list 核对实际收录的组件版本。
 
 ## 源码开发与资料同步
 
@@ -434,7 +434,7 @@ daisu mcp print --client vscode
 daisu mcp print --client codex
 \`\`\`
 
-下面展示全局安装 npm install -g @daisu-ui/cli@beta 后的简洁配置，使用 daisu mcp。客户端必须能在 PATH 找到 daisu；工作目录应为消费项目。需要固定目录时，args 使用 ["mcp", "--cwd", "/absolute/path/to/consumer-project"]。合并服务条目到已有配置，不覆盖整个文件。
+下面展示全局安装 npm install -g @daisu-ui/cli@latest 后的简洁配置，使用 daisu mcp。客户端必须能在 PATH 找到 daisu；工作目录应为消费项目。需要固定目录时，args 使用 ["mcp", "--cwd", "/absolute/path/to/consumer-project"]。合并服务条目到已有配置，不覆盖整个文件。
 
 print 只输出配置，不写文件。默认生成本机 Node 和 CLI 的绝对入口及消费项目目录，适合编辑器无法读取全局 PATH 的情况；目录含空格时保留为单个参数。
 
@@ -549,7 +549,7 @@ ${note}
 
 ## 安装前准备
 
-先执行 npm install -g @daisu-ui/cli@beta，或按 [CLI 工具](#/ai-cli) 使用项目依赖和源码入口。在需要生成代码的消费项目执行接入命令，不要把 CLI 仓库作为目标项目。源码用户用 \`node /absolute/path/to/cli/dist/index.js\` 替代 daisu；项目开发依赖用户用 \`npx --no-install daisu\`。
+先执行 npm install -g @daisu-ui/cli@latest，或按 [CLI 工具](#/ai-cli) 使用项目依赖和源码入口。在需要生成代码的消费项目执行接入命令，不要把 CLI 仓库作为目标项目。源码用户用 \`node /absolute/path/to/cli/dist/index.js\` 替代 daisu；项目开发依赖用户用 \`npx --no-install daisu\`。
 
 ## 一次接入
 
