@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <a href="https://gitcode.com/daisu/ui">组件库</a>
+  <a href="https://github.com/DaisSu-UI/daisu-ui">组件库</a>
   · <a href="#-30-秒接入">快速开始</a>
   · <a href="#agent-接入">Agent 接入</a>
   · <a href="#在终端使用">CLI</a>
