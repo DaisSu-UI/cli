@@ -93,7 +93,7 @@ test("documented global client snippets parse and use the published CLI entry", 
     const server = decodeServer(client, serverEntry(block[1], client));
     assert.deepEqual(server, { command: "daisu", args: ["mcp"] });
   }
-  assert.match(pages["cli.md"], /git@git.zilueit.com:daisu-ui\/cli.git/);
+  assert.match(pages["cli.md"], /git@github\.com:DaisSu-UI\/cli\.git/);
   assert.match(pages["overview.md"], /daisu_status/);
   assert.match(pages["mcp.md"], /sessionVerified/);
 });

@@ -178,7 +178,7 @@ daisu agent doctor --client cursor
 - [MCP 客户端配置与验证](#/ai-mcp)
 - [AI Skills 安装和项目规则](#/ai-skills)
 - [平台适配](#/platforms) · [定制主题](#/theme-customization)
-- [UI 源码仓库](https://git.zilueit.com/daisu-ui/daisu-ui) · [CLI 源码仓库](https://git.zilueit.com/daisu-ui/cli)
+- [UI 源码仓库](https://github.com/DaisSu-UI/daisu-ui) · [CLI 源码仓库](https://github.com/DaisSu-UI/cli)
 
 ${note}
 `,
@@ -186,7 +186,7 @@ ${note}
 
 [@daisu-ui/cli](https://www.npmjs.com/package/@daisu-ui/cli) 是 Daisu UI 的 AI 工具包，提供命令行工具、MCP Server、版本化离线组件知识库和消费端 Skill。它将真实的 ReactLynx 组件 API、文档、示例、主题变量和更新记录接入终端、编辑器与 Agent。
 
-[npm 包](https://www.npmjs.com/package/@daisu-ui/cli) · [源码仓库](https://git.zilueit.com/daisu-ui/cli) · [AI 总览](#/ai-guide)
+[npm 包](https://www.npmjs.com/package/@daisu-ui/cli) · [源码仓库](https://github.com/DaisSu-UI/cli) · [AI 总览](#/ai-guide)
 
 不确定 CLI、LLMs.txt、MCP 和 Skills 的区别时，先阅读 [AI 总览](#/ai-guide)。组件运行时包为 @daisu-ui/ui，CLI 是单独安装的开发工具。
 
@@ -352,7 +352,7 @@ UI 包和 CLI 的 npm 版本分别发布，网站或 Git 中的新快照不会�
 从 Git 构建后，在消费项目用构建入口查询或重新配置客户端：
 
 \`\`\`bash
-git clone git@git.zilueit.com:daisu-ui/cli.git
+git clone git@github.com:DaisSu-UI/cli.git
 cd cli
 npm ci
 npm run build
@@ -375,7 +375,7 @@ data check 校验版本索引、结构和 SHA-256 摘要。update 默认只报�
 
 ## 源码开发与资料同步
 
-源码：[git@git.zilueit.com:daisu-ui/cli.git](https://git.zilueit.com/daisu-ui/cli)。源码用户可以构建后通过 node /absolute/path/to/cli/dist/index.js 使用，也可 npm pack 生成 tarball。
+源码：[git@github.com:DaisSu-UI/cli.git](https://github.com/DaisSu-UI/cli)。源码用户可以构建后通过 node /absolute/path/to/cli/dist/index.js 使用，也可 npm pack 生成 tarball。
 
 本地按 DaiSu-UI/{cli,daisu-ui} 并列维护且依赖就绪时，正常构建自动完成 UI 组件资料 → CLI 快照、CLI 接入说明 → UI 文档站的双向同步。CLI 的 npm run dev 持续监听；UI 的 npm run ui:docs:dev 同时更新文档与必要的演示 Bundle。
 
@@ -543,7 +543,7 @@ ${note}
 
 | Skill | 内容 | 适用场景 | 源文件 |
 | --- | --- | --- | --- |
-| daisu-ui | 版本核对、API/示例查询、ReactLynx 约束与验证要求 | 组件选型、页面生成、主题和常见组件用法排查 | [SKILL.md](https://git.zilueit.com/daisu-ui/cli/blob/main/skills/daisu-ui/SKILL.md) |
+| daisu-ui | 版本核对、API/示例查询、ReactLynx 约束与验证要求 | 组件选型、页面生成、主题和常见组件用法排查 | [SKILL.md](https://github.com/DaisSu-UI/cli/blob/main/skills/daisu-ui/SKILL.md) |
 
 当前消费端技能随 [@daisu-ui/cli](https://www.npmjs.com/package/@daisu-ui/cli) 分发，通过下方 agent init 安装。UI 维护者的 Lynx 技能见本页末尾，分别服务于消费项目与组件库开发。
 
