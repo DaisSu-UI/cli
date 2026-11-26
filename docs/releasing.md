@@ -82,3 +82,13 @@ npm run npm:publish -- --dry-run
 ## 旧 GitLab 配置
 
 `.gitlab-ci.yml` 与 [本地 Runner](local-runner.md) 保留用于旧环境兼容；GitLab 10.5 / Runner 11.11 仍使用 only/except 与 dependencies。GitHub 的 NPM_TOKEN 不会同步到 GitLab。默认发布操作使用 GitHub 的 origin；不要同时向多个 CI 仓库推送发布标签。
+
+## GitHub → GitLab 分支同步
+
+工作流 [sync-gitlab.yml](../.github/workflows/sync-gitlab.yml) 在 GitHub 的 main / developer 推送后，将本次提交同步到 GitLab 的同名分支。也可在 Actions 的 **Sync branches to GitLab** 页面选择相应分支手动运行。
+
+GitLab 项目需要添加专用的 Deploy Key 并允许写入；对应私钥保存在 GitHub Repository secret `GITLAB_SSH_PRIVATE_KEY`。密钥仅供同步作业使用，临时文件权限为 0600，结束时清理。GitLab 必须可从 GitHub Runner 通过 SSH 访问。
+
+主机公钥使用已核对的 `.github/gitlab_known_hosts`，启用严格主机校验。服务端更换主机密钥时，应核对新指纹并更新该文件。
+
+同步使用普通分支推送；GitLab 出现独立提交导致分支分叉时，任务会失败，需要先协调合并历史。工作流不同步 Tag、不删除分支；npm 发布继续由 GitHub 的版本标签触发，避免旧 GitLab 流水线重复发布。
