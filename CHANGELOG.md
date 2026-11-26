@@ -1,5 +1,11 @@
 # 更新日志
 
+## 0.1.0-beta.6
+
+- 默认源码仓库和 npm 包元信息更新为 GitHub DaisSu-UI/cli。
+- 通过 GitHub Actions 验证、打包和发布 npm，复用校验产物并核对版本、main 来源与 SHA-512。
+- 补全组件公开 API 与辅助类型文档快照。
+
 ## 0.1.0-beta.5
 
 - 修复新 Runner 的离线安装包校验和 CI 凭据对测试的影响，通过 GitLab 自动发布 npm 首页居中修正版。
