@@ -198,9 +198,14 @@ export function relevantChange(kind, name) {
       .some(
         (part) =>
           part.startsWith(".") ||
-          ["node_modules", "dist", "dist-web", "h5-dist", "artifacts"].includes(
-            part,
-          ),
+          [
+            "node_modules",
+            "dist",
+            "dist-web",
+            "h5-dist",
+            "artifacts",
+            "build",
+          ].includes(part),
       )
   )
     return false;
@@ -216,12 +221,13 @@ export function relevantChange(kind, name) {
   if (
     path === "docs/ui/component-sources.json" ||
     path === "docs/ui/llms.txt" ||
+    path === "apps/docs/pages/compatibility.md" ||
     /^apps\/docs\/ai\/(overview|cli|mcp|skills)\.md$/.test(path) ||
     path === "apps/docs/ai/cli-manifest.json"
   )
     return false;
   return (
-    /^(packages\/daisu-ui\/src\/|apps\/demo\/(src|web)\/|apps\/docs\/|docs\/(ui|ci)\/)/.test(
+    /^(packages\/daisu-ui\/src\/|apps\/demo\/(src|web)\/|apps\/docs\/|examples\/(quickstart|flutter-host)\/|docs\/(ui|ci)\/)/.test(
       path,
     ) ||
     /^packages\/daisu-ui\/(package\.json|CHANGELOG\.md|tsconfig\.json)$/.test(
@@ -310,6 +316,13 @@ export async function watchSynchronization(options = {}) {
         "apps/docs/public",
         "apps/docs/pages",
         "apps/docs/ai",
+        "examples",
+        "examples/quickstart",
+        "examples/quickstart/src",
+        "examples/quickstart/web",
+        "examples/flutter-host",
+        "examples/flutter-host/lib",
+        "examples/flutter-host/test",
         "docs/ui",
         "docs/ui/components",
         "docs/ci",
@@ -329,6 +342,10 @@ export async function watchSynchronization(options = {}) {
         "apps/docs/guides",
         "apps/docs/public",
         "apps/docs/pages",
+        "examples/quickstart/src",
+        "examples/quickstart/web",
+        "examples/flutter-host/lib",
+        "examples/flutter-host/test",
       ].includes(path);
       const watcher = watch(directory, { recursive }, (_event, name) => {
         const file = relative(root, join(directory, name?.toString() || ""));
