@@ -140,6 +140,9 @@ test("watch filters exclude outputs and still react to source, API, examples and
     ["ui", "apps/docs/dist/index.html"],
     ["ui", "docs/ui/component-sources.json"],
     ["ui", "docs/ui/llms.txt"],
+    ["ui", "apps/docs/pages/compatibility.md"],
+    ["ui", "examples/quickstart/node_modules/pkg/index.js"],
+    ["ui", "examples/flutter-host/build/bundle"],
     ["ui", "docs/ui/components/layout.md"],
     ["ui", "apps/docs/ai/cli-manifest.json"],
     ["ui", "apps/docs/ai/mcp.md"],
@@ -152,6 +155,9 @@ test("watch filters exclude outputs and still react to source, API, examples and
     ["ui", "docs/ui/components/button.md"],
     ["ui", "apps/docs/guides/basic.mjs"],
     ["ui", "apps/demo/src/features/example.tsx"],
+    ["ui", "examples/quickstart/src/index.tsx"],
+    ["ui", "examples/quickstart/package.json"],
+    ["ui", "examples/flutter-host/lib/main.dart"],
   ])
     assert(relevantChange(kind, path), path);
 });
