@@ -1,6 +1,7 @@
 {
-  "latest": "0.1.0-beta.9",
+  "latest": "0.1.0-beta.10",
   "versions": [
+    "0.1.0-beta.10",
     "0.1.0-beta.9",
     "0.1.0-beta.6",
     "0.1.0-beta.5",
@@ -16,6 +17,7 @@
     "0.1.0-beta.4": "bcf58f50b1c5c5a71bcb8823927990be1136308551bbe0f03a49a7ffff32e66e",
     "0.1.0-beta.5": "9036aef9c82eab6119772859b0ec6fa37433b48ec6188d2c91705a377e8a8f8f",
     "0.1.0-beta.6": "9042b432d5e43d45cb9005f40941a4a8a4c796bfbc8cb1cbaf6c70a73801a3a5",
-    "0.1.0-beta.9": "d4f9104825ef9e5bafbce4b095552926740d8518821d45e9343e11a8c0bd31be"
+    "0.1.0-beta.9": "d4f9104825ef9e5bafbce4b095552926740d8518821d45e9343e11a8c0bd31be",
+    "0.1.0-beta.10": "3e82853c77d0f567ca9ef18dea1f0034b901f9bfc630a34801bb66cb03685180"
   }
 }
